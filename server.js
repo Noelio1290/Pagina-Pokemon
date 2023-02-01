@@ -1,16 +1,16 @@
 const express = require("express");
 const app = express();
 const port = 8080;
-const url = "https://pokeapi.co/api/v2/pokemon"
+const api = "https://pokeapi.co/api/v2/pokemon"
 
 //functions
 const bringPokemon = async (id)=>{
-    const res = await fetch(`${url}/${id}`)
-    const data = await res.json()
+    const payload = await fetch(`${api}/${id}`)
+    const data = await payload.json()
     const datosPokemon = {
         id:data.id,
         name:data.name,
-        imagen:data.sprites.front_default
+        img:data.sprites.front_default
     }
     return datosPokemon
 };
@@ -23,7 +23,7 @@ const bringPokemons =async (number)=>{
     return pokeNames
 };
 
-const getUserInfo = async (request, response)=>{
+const getPokemonInfo = async (request, response)=>{
     const data = await bringPokemons(20);
     response.setHeader("Content-Type", "text/html");
     response.send(data);
@@ -35,9 +35,9 @@ const getUserInfo = async (request, response)=>{
 app.use(express.json());
 app.use('/public', express.static('paginaPokemon'));
 
-app.get('/', getUserInfo); //Trae algo
+app.get('/', getPokemonInfo); //Trae algo
 
-app.listen(port, function(){
+app.listen(port,() => {
     console.log(`Inicializado en el puerto ${port}`);
     console.log(`http://localhost:${port}`);
 });
